@@ -4,6 +4,7 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:flutter_riverpod/legacy.dart';
 import 'package:geolocator/geolocator.dart';
 import 'package:ride_booking/Models/driver_model.dart';
+import 'package:ride_booking/Models/login_model.dart';
 import 'package:ride_booking/Repository/ride_repository.dart';
 import 'package:ride_booking/riverpods/authNotifier.dart';
 
@@ -27,7 +28,7 @@ final driverDetailsProvider =
     AsyncNotifierProvider<DriverDetailsNotifier, Driver?>(
       DriverDetailsNotifier.new,
     );
-final loginProvider = AsyncNotifierProvider<LoginNotifier, String?>(
+final loginProvider = AsyncNotifierProvider<LoginNotifier, LoginResponse?>(
   LoginNotifier.new,
 );
 

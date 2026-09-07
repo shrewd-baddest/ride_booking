@@ -3,12 +3,13 @@ import 'dart:convert';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:http/http.dart' as http;
 import 'package:ride_booking/Models/user_model.dart';
+import 'package:ride_booking/Models/login_model.dart';
 
-class LoginNotifier extends AsyncNotifier<String?> {
+class LoginNotifier extends AsyncNotifier<LoginResponse?> {
   @override
-  Future<String?> build() async => '';
+  Future<LoginResponse?> build() async => null;
 
-  Future<String?> _submit(User user, String url) async {
+  Future<LoginResponse?> _submit(User user, String url) async {
     state = const AsyncLoading();
 
     try {
@@ -23,15 +24,15 @@ class LoginNotifier extends AsyncNotifier<String?> {
         throw Exception(res);
       }
 
-      state = AsyncData(res);
-      return res;
+      state = AsyncData(LoginResponse.fromJson(jsonDecode(res)));
+      return LoginResponse.fromJson(jsonDecode(res));
     } catch (e, stackTrace) {
       state = AsyncError(e, stackTrace);
       return null;
     }
   }
 
-  Future<String?> login(User user, String url) => _submit(user, url);
+  Future<LoginResponse?> login(User user, String url) => _submit(user, url);
 
-  Future<String?> register(User user, String url) => _submit(user, url);
+  Future<LoginResponse?> register(User user, String url) => _submit(user, url);
 }
