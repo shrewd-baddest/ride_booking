@@ -1,8 +1,3 @@
--- ============================================================
--- PostgreSQL SOURCE-OF-TRUTH SCHEMA
--- UUID-based primary and foreign keys
--- ============================================================
--- Enable UUID generation
 CREATE EXTENSION IF NOT EXISTS pgcrypto;
 CREATE TABLE IF NOT EXISTS users (
     id UUID PRIMARY KEY DEFAULT gen_random_uuid(),
@@ -23,7 +18,7 @@ CREATE TABLE IF NOT EXISTS drivers (
 );
 CREATE TABLE IF NOT EXISTS rides (
     id UUID PRIMARY KEY DEFAULT gen_random_uuid(),
-    driver_id UUID NOT NULL REFERENCES drivers(id),
+    driver_id UUID REFERENCES drivers(id),
     user_id UUID NOT NULL REFERENCES users(id),
     from_location TEXT NOT NULL,
     to_location TEXT NOT NULL,
@@ -40,6 +35,8 @@ CREATE TABLE IF NOT EXISTS rides (
     ),
     created_at TIMESTAMPTZ NOT NULL DEFAULT NOW()
 );
+ALTER TABLE rides
+ALTER COLUMN driver_id DROP NOT NULL;
 CREATE TABLE IF NOT EXISTS payments (
     id UUID PRIMARY KEY DEFAULT gen_random_uuid(),
     ride_id UUID NOT NULL UNIQUE REFERENCES rides(id),

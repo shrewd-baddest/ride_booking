@@ -39,7 +39,7 @@ export const loginUser = async (
         }
 
         const token = sign({
-            id: Number(user.id),
+            id: user.id as string,
             phone_number: user.phone_number as string,
         });
 

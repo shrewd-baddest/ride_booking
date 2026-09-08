@@ -17,7 +17,7 @@ class DatabaseService {
   Future<Database> _initDatabase() async {
     return openDatabase(
       join(await getDatabasesPath(), 'rideBooking.db'),
-      version: 2,
+      version: 3,
       onCreate: _createTables,
       onUpgrade: _upgradeDatabase,
     );
@@ -40,6 +40,20 @@ class DatabaseService {
       await db.execute('DROP TABLE IF EXISTS driver');
       await db.execute('DROP TABLE IF EXISTS ride');
       await _createTables(db, version);
+    }
+    if (oldVersion < 3) {
+      await db.transaction((transaction) async {
+        await transaction.execute('ALTER TABLE ride RENAME TO ride_old');
+        await transaction.execute(rideTable.createTable);
+        await transaction.execute('''
+          INSERT INTO ride
+            (Id, driver_id, user_id, from_location, to_location, distance, duration, created_at)
+          SELECT Id, CAST(driver_id AS TEXT), CAST(user_id AS TEXT),
+            from_location, to_location, distance, duration, created_at
+          FROM ride_old
+        ''');
+        await transaction.execute('DROP TABLE ride_old');
+      });
     }
   }
 }

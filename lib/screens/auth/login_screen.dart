@@ -44,6 +44,11 @@ class _LoginScreenState extends ConsumerState<LoginScreen> {
 
         if (loginResponse.success == true) {
           // Handle successful login
+          final userId = loginResponse.data?['user']?['id'];
+          if (userId is String) {
+            ref.read(userIdProvider.notifier).state = userId;
+          }
+
           ScaffoldMessenger.of(
             context,
           ).showSnackBar(const SnackBar(content: Text('Login successful!')));
@@ -51,7 +56,7 @@ class _LoginScreenState extends ConsumerState<LoginScreen> {
             key: 'token',
             value: loginResponse.data?['token'],
           );
-          if (!mounted) return;
+          if (!context.mounted) return;
           Navigator.pushNamedAndRemoveUntil(
             context,
             RouteNames.home,
@@ -63,7 +68,7 @@ class _LoginScreenState extends ConsumerState<LoginScreen> {
             const SnackBar(content: Text('Login failed. Please try again.')),
           );
         }
-      } else if (nextState is AsyncError) {
+      } else if (nextState is AsyncError<LoginResponse>) {
         final errorResponse = nextState.error;
         // Handle error state
         ScaffoldMessenger.of(context).showSnackBar(

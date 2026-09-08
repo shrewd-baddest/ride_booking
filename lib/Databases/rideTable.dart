@@ -4,8 +4,8 @@ class rideTable {
   static const createTable = '''
 CREATE TABLE ride (
     Id INTEGER PRIMARY KEY AUTOINCREMENT,
-    driver_id INTEGER NOT NULL,
-    user_id INTEGER NOT NULL,
+    driver_id TEXT,
+    user_id TEXT NOT NULL,
     from_location TEXT NOT NULL,
     to_location TEXT NOT NULL,
     distance REAL NOT NULL,

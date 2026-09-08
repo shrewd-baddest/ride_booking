@@ -54,7 +54,7 @@ class _RideBookingScreenState extends ConsumerState<RideBookingScreen> {
 
                       const SizedBox(height: 14),
 
-                      const LocationField(text: 'Westlands, Nairobi'),
+                      const LocationField(),
 
                       const SizedBox(height: 8),
 
@@ -82,11 +82,11 @@ class _RideBookingScreenState extends ConsumerState<RideBookingScreen> {
                           final messenger = ScaffoldMessenger.maybeOf(context);
                           final ride = Ride(
                             id: 0,
-                            driverId: 1,
-                            userId: 1,
+                            driverId: null,
+                            userId: ref.read(userIdProvider),
                             fromLocation:
-                                ref.read(locationProvider).trim().isNotEmpty
-                                ? ref.read(locationProvider)
+                                ref.read(locationNameProvider).trim().isNotEmpty
+                                ? ref.read(locationNameProvider)
                                 : 'Westlands, Nairobi',
                             toLocation:
                                 ref.read(destinationProvider).trim().isNotEmpty
@@ -112,6 +112,8 @@ class _RideBookingScreenState extends ConsumerState<RideBookingScreen> {
                               SnackBar(content: Text(message)),
                             );
                           }
+                          if (!context.mounted) return;
+
                           Navigator.pushNamed(
                             context,
                             RouteNames.rideInProgress,

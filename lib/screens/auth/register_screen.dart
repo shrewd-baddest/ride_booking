@@ -35,7 +35,7 @@ class _RegisterScreenState extends ConsumerState<RegisterScreen> {
   Widget build(BuildContext context) {
     final keyForm = GlobalKey<FormState>();
 
-    ref.listen(loginProvider, (previousState, nextState) {
+    ref.listen(registerProvider, (previousState, nextState) {
       if (nextState is AsyncData<LoginResponse?>) {
         final loginResponse = nextState.value;
         if (loginResponse!.success == true) {

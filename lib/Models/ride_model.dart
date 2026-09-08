@@ -1,7 +1,7 @@
 class Ride {
   final int id;
-  final int driverId;
-  final int userId;
+  final String? driverId;
+  final String userId;
   final String fromLocation;
   final String toLocation;
   final double distance;
@@ -23,8 +23,8 @@ class Ride {
   factory Ride.fromMap(Map<String, dynamic> map) {
     return Ride(
       id: map['Id'] as int,
-      driverId: map['driver_id'] as int,
-      userId: map['user_id'] as int,
+      driverId: map['driver_id'] as String?,
+      userId: map['user_id'] as String,
       fromLocation: map['from_location'] as String,
       toLocation: map['to_location'] as String,
       distance: (map['distance'] as num).toDouble(),
@@ -47,11 +47,22 @@ class Ride {
     };
   }
 
+  Map<String, dynamic> toApiMap() {
+    return {
+      if (driverId != null) 'driver_id': driverId,
+      'from_location': fromLocation,
+      'to_location': toLocation,
+      'distance': distance,
+      'duration': duration,
+      'created_at': createdAt.toIso8601String(),
+    };
+  }
+
   /// Create a copy of Ride with optional field replacements
   Ride copyWith({
     int? id,
-    int? driverId,
-    int? userId,
+    String? driverId,
+    String? userId,
     String? fromLocation,
     String? toLocation,
     double? distance,

@@ -4,7 +4,7 @@ const SECRET = process.env.JWT_SECRET || 'dev_secret_change_me';
 const EXPIRES = process.env.JWT_EXPIRES_IN || '7d';
 
 export interface JwtPayload {
-  id: number;
+  id: string;
   phone_number: string;
 }
 

@@ -5,7 +5,7 @@ import 'package:http/http.dart' as http;
 import 'package:ride_booking/Models/user_model.dart';
 import 'package:ride_booking/Models/login_model.dart';
 
-class LoginNotifier extends AsyncNotifier<LoginResponse?> {
+class AuthNotifier extends AsyncNotifier<LoginResponse?> {
   @override
   Future<LoginResponse?> build() async => null;
 

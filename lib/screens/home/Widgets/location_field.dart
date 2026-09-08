@@ -3,9 +3,7 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:ride_booking/riverpods/providers.dart';
 
 class LocationField extends ConsumerStatefulWidget {
-  final String text;
-
-  const LocationField({super.key, required this.text});
+  const LocationField({super.key});
 
   @override
   ConsumerState<LocationField> createState() => _LocationFieldState();
@@ -17,9 +15,7 @@ class _LocationFieldState extends ConsumerState<LocationField> {
   @override
   void initState() {
     super.initState();
-    _controller = TextEditingController(
-      text: widget.text.isNotEmpty ? widget.text : ref.read(locationProvider),
-    );
+    _controller = TextEditingController(text: ref.read(locationNameProvider));
   }
 
   @override
@@ -30,6 +26,18 @@ class _LocationFieldState extends ConsumerState<LocationField> {
 
   @override
   Widget build(BuildContext context) {
+    ref.listen<String>(locationNameProvider, (previous, next) {
+      if (_controller.text == next) {
+        return;
+      }
+
+      _controller.value = _controller.value.copyWith(
+        text: next,
+        selection: TextSelection.collapsed(offset: next.length),
+        composing: TextRange.empty,
+      );
+    });
+
     return Container(
       height: 38,
       padding: const EdgeInsets.symmetric(horizontal: 10),
@@ -53,7 +61,7 @@ class _LocationFieldState extends ConsumerState<LocationField> {
             child: TextField(
               controller: _controller,
               onChanged: (value) {
-                ref.read(locationProvider.notifier).state = value;
+                ref.read(locationNameProvider.notifier).state = value;
               },
               style: const TextStyle(fontSize: 12, color: Color(0xFFE7EAF0)),
               decoration: const InputDecoration(

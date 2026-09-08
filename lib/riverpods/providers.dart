@@ -11,7 +11,12 @@ import 'package:ride_booking/riverpods/authNotifier.dart';
 import 'notifier.dart';
 
 final selectProvider = StateProvider<int>((ref) => 0);
-final locationProvider = StateProvider<String>((ref) => '');
+final locationProvider = AsyncNotifierProvider<LocationNameNotifier, String>(
+  LocationNameNotifier.new,
+);
+final locationNameProvider = StateProvider<String>(
+  (ref) => ref.watch(locationProvider).value ?? '',
+);
 final destinationProvider = StateProvider<String>((ref) => '');
 final gpsProvider = AsyncNotifierProvider<GpsNotifier, Position>(
   GpsNotifier.new,
@@ -23,13 +28,15 @@ final rideRepositoryProvider = Provider<RideRepository>(
 final rideBookingProvider = AsyncNotifierProvider<RideBookingNotifier, String>(
   RideBookingNotifier.new,
 );
-final userIdProvider = StateProvider<int>((ref) => 0);
+final userIdProvider = StateProvider<String>((ref) => '');
 final driverDetailsProvider =
     AsyncNotifierProvider<DriverDetailsNotifier, Driver?>(
       DriverDetailsNotifier.new,
     );
-final loginProvider = AsyncNotifierProvider<LoginNotifier, LoginResponse?>(
-  LoginNotifier.new,
+final loginProvider = AsyncNotifierProvider<AuthNotifier, LoginResponse?>(
+  AuthNotifier.new,
 );
 
-final registerProvider = loginProvider;
+final registerProvider = AsyncNotifierProvider<AuthNotifier, LoginResponse?>(
+  AuthNotifier.new,
+);
