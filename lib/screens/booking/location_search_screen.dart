@@ -5,6 +5,18 @@ class LocationSearchScreen extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return const Placeholder();
+    return Scaffold(
+      appBar: AppBar(title: const Text('Search location')),
+      body: const Padding(
+        padding: EdgeInsets.all(16),
+        child: TextField(
+          decoration: InputDecoration(
+            hintText: 'Where to?',
+            prefixIcon: Icon(Icons.search),
+            border: OutlineInputBorder(),
+          ),
+        ),
+      ),
+    );
   }
 }

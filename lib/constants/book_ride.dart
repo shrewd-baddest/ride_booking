@@ -8,3 +8,5 @@ class BookRideConstants {
     {"icon": Icons.check, "label": "Done"},
   ];
 }
+
+enum RideStatus { booked, enRoute, arrived, done }

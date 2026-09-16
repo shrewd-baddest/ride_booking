@@ -2,7 +2,7 @@ import 'package:ride_booking/Databases/database.dart';
 import 'package:ride_booking/Models/driver_model.dart';
 
 class getDriver {
-  final int? userId;
+  final String? userId;
 
   getDriver({this.userId});
   final DatabaseService databaseService = DatabaseService();

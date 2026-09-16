@@ -4,6 +4,9 @@ class Driver {
   final String phoneNumber;
   final String email;
   final String licenseNumber;
+  final String vehicleRegistration;
+  final String vehicleColor;
+  final String vehicleModel;
   final int? userId;
   final bool isAvailable;
   final DateTime createdAt;
@@ -14,6 +17,9 @@ class Driver {
     required this.phoneNumber,
     required this.email,
     required this.licenseNumber,
+    required this.vehicleRegistration,
+    required this.vehicleColor,
+    required this.vehicleModel,
     this.userId,
     this.isAvailable = false,
     required this.createdAt,
@@ -27,6 +33,9 @@ class Driver {
       phoneNumber: map['phone_number'] as String? ?? '',
       email: map['email'] as String? ?? '',
       licenseNumber: map['license_number'] as String? ?? '',
+      vehicleRegistration: map['vehicle_registration'] as String? ?? '',
+      vehicleColor: map['vehicle_color'] as String? ?? '',
+      vehicleModel: map['vehicle_model'] as String? ?? '',
       userId: map['user_id'] as int?,
       isAvailable: (map['is_available'] as int? ?? 0) == 1,
       createdAt: DateTime.parse(map['created_at'] as String),
@@ -40,6 +49,9 @@ class Driver {
       'name': name,
       'user_id': userId,
       'is_available': isAvailable ? 1 : 0,
+      'vehicle_registration': vehicleRegistration,
+      'vehicle_color': vehicleColor,
+      'vehicle_model': vehicleModel,
       'created_at': createdAt.toIso8601String(),
     };
   }
@@ -51,6 +63,9 @@ class Driver {
     String? phoneNumber,
     String? email,
     String? licenseNumber,
+    String? vehicleRegistration,
+    String? vehicleColor,
+    String? vehicleModel,
     int? userId,
     bool? isAvailable,
     DateTime? createdAt,
@@ -59,8 +74,12 @@ class Driver {
       id: id ?? this.id,
       name: name ?? this.name,
       phoneNumber: phoneNumber ?? this.phoneNumber,
+
       email: email ?? this.email,
       licenseNumber: licenseNumber ?? this.licenseNumber,
+      vehicleRegistration: vehicleRegistration ?? this.vehicleRegistration,
+      vehicleColor: vehicleColor ?? this.vehicleColor,
+      vehicleModel: vehicleModel ?? this.vehicleModel,
       userId: userId ?? this.userId,
       isAvailable: isAvailable ?? this.isAvailable,
       createdAt: createdAt ?? this.createdAt,

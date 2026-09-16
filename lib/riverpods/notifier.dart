@@ -71,7 +71,7 @@ class DriverDetailsNotifier extends AsyncNotifier<Driver?> {
   @override
   Future<Driver?> build() async {
     final userId = ref.read(userIdProvider);
-    if (userId == 0) {
+    if (userId.trim().isEmpty) {
       throw StateError('User ID is not available.');
     }
 

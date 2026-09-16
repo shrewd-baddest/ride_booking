@@ -20,6 +20,7 @@ class RideBookingScreen extends ConsumerStatefulWidget {
 }
 
 class _RideBookingScreenState extends ConsumerState<RideBookingScreen> {
+  final GlobalKey<FormState> _formKey = GlobalKey<FormState>();
   int selectedRide = 0;
 
   final List<RideModel> rides = const [
@@ -48,79 +49,84 @@ class _RideBookingScreenState extends ConsumerState<RideBookingScreen> {
                 physics: const NeverScrollableScrollPhysics(),
                 child: Padding(
                   padding: const EdgeInsets.symmetric(horizontal: 16),
-                  child: Column(
-                    children: [
-                      const RideMap(),
+                  child: Form(
+                    key: _formKey,
+                    child: Column(
+                      children: [
+                        const RideMap(),
 
-                      const SizedBox(height: 14),
+                        const SizedBox(height: 14),
 
-                      const LocationField(),
+                        const LocationField(),
 
-                      const SizedBox(height: 8),
+                        const SizedBox(height: 8),
 
-                      const DestinationField(),
+                        const DestinationField(),
 
-                      const SizedBox(height: 15),
+                        const SizedBox(height: 15),
 
-                      RideSelector(
-                        rides: rides,
-                        selectedIndex: selectedRide,
-                        onSelected: (index) {
-                          setState(() {
-                            selectedRide = index;
-                          });
-                          ref.read(rideProvider.notifier).state =
-                              rides[index].name;
-                        },
-                      ),
+                        RideSelector(
+                          rides: rides,
+                          selectedIndex: selectedRide,
+                          onSelected: (index) {
+                            setState(() {
+                              selectedRide = index;
+                            });
+                            ref.read(rideProvider.notifier).state =
+                                rides[index].name;
+                          },
+                        ),
 
-                      const SizedBox(height: 15),
+                        const SizedBox(height: 15),
 
-                      BookRideButton(
-                        ride: currentRide,
-                        onPressed: () async {
-                          final messenger = ScaffoldMessenger.maybeOf(context);
-                          final ride = Ride(
-                            id: 0,
-                            driverId: null,
-                            userId: ref.read(userIdProvider),
-                            fromLocation:
-                                ref.read(locationNameProvider).trim().isNotEmpty
-                                ? ref.read(locationNameProvider)
-                                : 'Westlands, Nairobi',
-                            toLocation:
-                                ref.read(destinationProvider).trim().isNotEmpty
-                                ? ref.read(destinationProvider)
-                                : 'Nairobi CBD',
-                            distance: 12.5,
-                            duration: 18,
-                            createdAt: DateTime.now(),
-                          );
+                        BookRideButton(
+                          ride: currentRide,
+                          onPressed: () async {
+                            if (!(_formKey.currentState?.validate() ?? false)) {
+                              return;
+                            }
 
-                          await ref
-                              .read(rideBookingProvider.notifier)
-                              .bookRide(ride);
-
-                          final state = ref.read(rideBookingProvider);
-                          final message =
-                              state.value ??
-                              state.error?.toString() ??
-                              'Ride booking failed';
-
-                          if (mounted && messenger != null) {
-                            messenger.showSnackBar(
-                              SnackBar(content: Text(message)),
+                            final messenger = ScaffoldMessenger.maybeOf(
+                              context,
                             );
-                          }
-                          if (!context.mounted) return;
+                            final ride = Ride(
+                              id: 0,
+                              driverId: null,
+                              userId: ref.read(userIdProvider),
+                              fromLocation: ref
+                                  .read(locationNameProvider)
+                                  .trim(),
+                              toLocation: ref.read(destinationProvider).trim(),
+                              distance: 12.5,
+                              duration: 18,
+                              createdAt: DateTime.now(),
+                            );
 
-                          Navigator.pushNamed(
-                            context,
-                            RouteNames.rideInProgress,
-                          );
-                        },
-                      ),
-                    ],
+                            await ref
+                                .read(rideBookingProvider.notifier)
+                                .bookRide(ride);
+
+                            final state = ref.read(rideBookingProvider);
+                            final message =
+                                state.value ??
+                                state.error?.toString() ??
+                                'Ride booking failed';
+
+                            if (mounted && messenger != null) {
+                              messenger.showSnackBar(
+                                SnackBar(content: Text(message)),
+                              );
+                            }
+                            if (!context.mounted) return;
+
+                            Navigator.pushNamed(
+                              context,
+                              RouteNames.rideInProgress,
+                            );
+                          },
+                        ),
+                      ],
+                    ),
                   ),
                 ),
               ),

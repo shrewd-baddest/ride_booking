@@ -7,6 +7,7 @@ import 'package:ride_booking/Models/driver_model.dart';
 import 'package:ride_booking/Models/login_model.dart';
 import 'package:ride_booking/Repository/ride_repository.dart';
 import 'package:ride_booking/riverpods/authNotifier.dart';
+import 'package:ride_booking/constants/book_ride.dart';
 
 import 'notifier.dart';
 
@@ -22,6 +23,10 @@ final gpsProvider = AsyncNotifierProvider<GpsNotifier, Position>(
   GpsNotifier.new,
 );
 final rideProvider = StateProvider<String>((ref) => '');
+final rideStatusProvider = StateProvider<RideStatus>(
+  (ref) => RideStatus.booked,
+);
+final etaProvider = StateProvider<int?>((ref) => null);
 final rideRepositoryProvider = Provider<RideRepository>(
   (ref) => RideRepository(),
 );

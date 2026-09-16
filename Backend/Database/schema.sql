@@ -13,6 +13,10 @@ CREATE TABLE IF NOT EXISTS drivers (
     name TEXT NOT NULL,
     phone_number TEXT NOT NULL UNIQUE,
     email TEXT,
+    rating NUMERIC(2, 1) NOT NULL DEFAULT 5.0 CHECK (
+        rating >= 0
+        AND rating <= 5
+    ),
     license_number TEXT NOT NULL UNIQUE,
     created_at TIMESTAMPTZ NOT NULL DEFAULT NOW()
 );
