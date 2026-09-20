@@ -34,6 +34,7 @@ final rideBookingProvider = AsyncNotifierProvider<RideBookingNotifier, String>(
   RideBookingNotifier.new,
 );
 final userIdProvider = StateProvider<String>((ref) => '');
+final driverIdProvider = StateProvider<String>((ref) => '');
 final driverDetailsProvider =
     AsyncNotifierProvider<DriverDetailsNotifier, Driver?>(
       DriverDetailsNotifier.new,
