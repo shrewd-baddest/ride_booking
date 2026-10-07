@@ -60,8 +60,13 @@ class RideBookingNotifier extends AsyncNotifier<String> {
 
     try {
       final repository = RideRepository();
-      final message = await repository.addRide(ride);
-      state = AsyncData(message);
+      ref.read(driverIdProvider.notifier).state = '';
+      final result = await repository.addRide(ride);
+      final driverId = result.driverId;
+      if (driverId != null) {
+        ref.read(driverIdProvider.notifier).state = driverId;
+      }
+      state = AsyncData(result.message);
     } catch (error, stackTrace) {
       state = AsyncError('Ride booking failed', stackTrace);
     }
@@ -73,12 +78,14 @@ class DriverDetailsNotifier extends AsyncNotifier<Driver?> {
 
   @override
   Future<Driver?> build() async {
-    final driverId = ref.read(driverIdProvider);
-    if (driverId.trim().isEmpty) {
-      throw StateError('Driver ID is not available.');
+    final driverId = ref.watch(driverIdProvider).trim();
+    if (driverId.isEmpty) {
+      return null;
     }
 
-    final response = await http.get(Uri.parse('$_apiUrl/$driverId'));
+    final response = await http.get(
+      Uri.parse('$_apiUrl/${Uri.encodeComponent(driverId)}'),
+    );
 
     if (response.statusCode != 200) {
       throw StateError('Failed to load driver details: ${response.statusCode}');

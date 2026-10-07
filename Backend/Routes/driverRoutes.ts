@@ -1,8 +1,12 @@
 import express from "express";
-import { getDriverById } from "../controllers/driverControllers.js";
+import {
+	getDriverById,
+	updateDriverLocation,
+} from "../controllers/driverControllers.js";
 
 const driverRouter = express.Router();
 
 driverRouter.get("/:id", getDriverById);
+driverRouter.patch("/:id/location", updateDriverLocation);
 
 export default driverRouter;

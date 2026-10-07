@@ -7,6 +7,8 @@ class Ride {
   final double distance;
   final int duration;
   final DateTime createdAt;
+  final double? pickupLatitude;
+  final double? pickupLongitude;
 
   Ride({
     required this.id,
@@ -17,6 +19,8 @@ class Ride {
     required this.distance,
     required this.duration,
     required this.createdAt,
+    this.pickupLatitude,
+    this.pickupLongitude,
   });
 
   /// Create a Ride from a Map (typically from database or JSON)
@@ -55,6 +59,8 @@ class Ride {
       'distance': distance,
       'duration': duration,
       'created_at': createdAt.toIso8601String(),
+      if (pickupLatitude != null) 'pickup_latitude': pickupLatitude,
+      if (pickupLongitude != null) 'pickup_longitude': pickupLongitude,
     };
   }
 

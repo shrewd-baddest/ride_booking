@@ -18,8 +18,15 @@ CREATE TABLE IF NOT EXISTS drivers (
         AND rating <= 5
     ),
     license_number TEXT NOT NULL UNIQUE,
+    current_latitude NUMERIC(9, 6),
+    current_longitude NUMERIC(9, 6),
+    location_updated_at TIMESTAMPTZ,
     created_at TIMESTAMPTZ NOT NULL DEFAULT NOW()
 );
+ALTER TABLE drivers
+ADD COLUMN IF NOT EXISTS current_latitude NUMERIC(9, 6),
+    ADD COLUMN IF NOT EXISTS current_longitude NUMERIC(9, 6),
+    ADD COLUMN IF NOT EXISTS location_updated_at TIMESTAMPTZ;
 CREATE TABLE IF NOT EXISTS rides (
     id UUID PRIMARY KEY DEFAULT gen_random_uuid(),
     driver_id UUID REFERENCES drivers(id),

@@ -1,4 +1,3 @@
-import  jwt  from 'jsonwebtoken';
 import type { NextFunction, Request, Response } from "express";
 import { verify } from "../utils/tokens.js";
 import { error } from "../utils/response.js";
@@ -23,8 +22,14 @@ export const requireAuth = (
     }
 
     try {
-        req.userId = jwt.verify(token, process.env.JWT_SECRET as string) as string;
-        
+        const payload = verify(token);
+
+        if (!payload?.id) {
+            error(res, "Invalid or expired token", 401);
+            return;
+        }
+
+        req.userId = payload.id;
         next();
     } catch {
         error(res, "Invalid or expired token", 401);

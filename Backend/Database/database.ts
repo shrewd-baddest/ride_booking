@@ -1,27 +1,32 @@
-import { Pool } from "pg";
+import { Client } from "pg";
 import dotenv from "dotenv";
 
 dotenv.config();
 
 const connectionString = process.env.DATABASE_URL;
-const isRemoteDatabase = connectionString?.includes("neon.tech") || connectionString?.includes("pooler");
 
-const db = new Pool({
+if (!connectionString) {
+  throw new Error("DATABASE_URL is not defined in .env");
+}
+
+const db = new Client({
   connectionString,
-  ssl: isRemoteDatabase ? { rejectUnauthorized: false } : false,
-  max: 5,
-  idleTimeoutMillis: 30000,
-  connectionTimeoutMillis: 15000,
+  ssl: {
+    rejectUnauthorized: false,
+  },
 });
 
 export const testDatabaseConnection = async () => {
   try {
+    await db.connect();
+
     const result = await db.query("SELECT NOW() AS now");
 
     console.log("✅ PostgreSQL connected successfully!");
     console.log("Database time:", result.rows[0].now);
+    console.log("DATABASE_URL exists:", !!process.env.DATABASE_URL);
   } catch (error) {
-    console.error("❌ PostgreSQL connection failed! Check your DATABASE_URL and ensure the database is reachable.");
+    console.error("❌ PostgreSQL connection failed!");
     console.error(error);
   }
 };

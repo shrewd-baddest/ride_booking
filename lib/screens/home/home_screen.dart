@@ -89,6 +89,9 @@ class _RideBookingScreenState extends ConsumerState<RideBookingScreen> {
                             final messenger = ScaffoldMessenger.maybeOf(
                               context,
                             );
+                            final pickupPosition = await ref.read(
+                              gpsProvider.future,
+                            );
                             final ride = Ride(
                               id: 0,
                               driverId: null,
@@ -100,6 +103,8 @@ class _RideBookingScreenState extends ConsumerState<RideBookingScreen> {
                               distance: 12.5,
                               duration: 18,
                               createdAt: DateTime.now(),
+                              pickupLatitude: pickupPosition.latitude,
+                              pickupLongitude: pickupPosition.longitude,
                             );
 
                             await ref

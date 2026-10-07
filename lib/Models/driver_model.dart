@@ -1,5 +1,5 @@
 class Driver {
-  final int id;
+  final int? id;
   final String name;
   final String phoneNumber;
   final String email;
@@ -12,7 +12,7 @@ class Driver {
   final DateTime createdAt;
 
   Driver({
-    required this.id,
+    this.id,
     required this.name,
     required this.phoneNumber,
     required this.email,
@@ -28,7 +28,7 @@ class Driver {
   /// Create a Driver from a Map (typically from database or JSON)
   factory Driver.fromMap(Map<String, dynamic> map) {
     return Driver(
-      id: map['Id'] as int,
+      id: map['Id'] as int?,
       name: map['name'] as String,
       phoneNumber: map['phone_number'] as String? ?? '',
       email: map['email'] as String? ?? '',
@@ -74,7 +74,6 @@ class Driver {
       id: id ?? this.id,
       name: name ?? this.name,
       phoneNumber: phoneNumber ?? this.phoneNumber,
-
       email: email ?? this.email,
       licenseNumber: licenseNumber ?? this.licenseNumber,
       vehicleRegistration: vehicleRegistration ?? this.vehicleRegistration,

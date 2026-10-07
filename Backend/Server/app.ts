@@ -1,12 +1,13 @@
+import dotenv from "dotenv";
+
+dotenv.config();
+
 import express from "express";
 import cors from "cors";
-import dotenv from "dotenv";
 import { testDatabaseConnection } from "../Database/database.js";
 import authRouter from "../Routes/authControllers.js";
 import driverRouter from "../Routes/driverRoutes.js";
 import rideRouter from "../Routes/rideRoutes.js";
-
-dotenv.config();
 
 const app = express();
 
