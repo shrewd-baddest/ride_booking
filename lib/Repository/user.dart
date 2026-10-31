@@ -7,8 +7,14 @@ class userRepository {
   Future<void> addUser(User user) async {
     final db = await databaseService.database;
     await db.insert('users', {
-      'Id': user.id,
-      'name': user.fullName,
+      'id':
+          user.id?.toString() ??
+          'user_${DateTime.now().microsecondsSinceEpoch}',
+      'full_name': user.fullName,
+      'email': user.email,
+      'phone_number': user.phoneNumber,
+      'password': user.password ?? '',
+      'is_verified': 1,
       'created_at': (user.createdAt ?? DateTime.now()).toIso8601String(),
     });
   }
@@ -26,16 +32,20 @@ class userRepository {
     await db.update(
       'users',
       {
-        'name': user.fullName,
+        'full_name': user.fullName,
+        'email': user.email,
+        'phone_number': user.phoneNumber,
+        'password': user.password ?? '',
+        'is_verified': 1,
         'created_at': (user.createdAt ?? DateTime.now()).toIso8601String(),
       },
-      where: 'Id = ?',
+      where: 'id = ?',
       whereArgs: [user.id],
     );
   }
 
   Future<void> deleteUser(int id) async {
     final db = await databaseService.database;
-    await db.delete('users', where: 'Id = ?', whereArgs: [id]);
+    await db.delete('users', where: 'id = ?', whereArgs: [id.toString()]);
   }
 }

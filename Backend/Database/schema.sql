@@ -51,9 +51,6 @@ ALTER COLUMN driver_id DROP NOT NULL;
 CREATE TABLE IF NOT EXISTS payments (
     id UUID PRIMARY KEY DEFAULT gen_random_uuid(),
     ride_id UUID NOT NULL UNIQUE REFERENCES rides(id),
-    base_fare NUMERIC(12, 2) NOT NULL CHECK (base_fare >= 0),
-    distance_fare NUMERIC(12, 2) NOT NULL CHECK (distance_fare >= 0),
-    time_fare NUMERIC(12, 2) NOT NULL CHECK (time_fare >= 0),
     total_fare NUMERIC(12, 2) NOT NULL CHECK (total_fare >= 0),
     payment_method TEXT NOT NULL,
     payment_status TEXT NOT NULL DEFAULT 'pending' CHECK (

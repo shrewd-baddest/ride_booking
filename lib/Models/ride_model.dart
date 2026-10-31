@@ -1,6 +1,7 @@
 class Ride {
   final int id;
-  final String? driverId;
+  final String? driverName;
+  final double fare;
   final String userId;
   final String fromLocation;
   final String toLocation;
@@ -9,10 +10,17 @@ class Ride {
   final DateTime createdAt;
   final double? pickupLatitude;
   final double? pickupLongitude;
+  final String? date;
+  final String? time;
+  final String? category;
+  final String paymentMethod;
+  final String status;
+  final int rating;
 
   Ride({
     required this.id,
-    required this.driverId,
+    this.driverName,
+    required this.fare,
     required this.userId,
     required this.fromLocation,
     required this.toLocation,
@@ -21,39 +29,68 @@ class Ride {
     required this.createdAt,
     this.pickupLatitude,
     this.pickupLongitude,
+    this.date,
+    this.time,
+    this.category,
+    this.paymentMethod = 'Unknown',
+    this.status = 'Completed',
+    this.rating = 5,
   });
+
+  String get driver => driverName ?? 'Unassigned';
+  String get pickup => fromLocation;
+  String get destination => toLocation;
 
   /// Create a Ride from a Map (typically from database or JSON)
   factory Ride.fromMap(Map<String, dynamic> map) {
     return Ride(
-      id: map['Id'] as int,
-      driverId: map['driver_id'] as String?,
-      userId: map['user_id'] as String,
-      fromLocation: map['from_location'] as String,
-      toLocation: map['to_location'] as String,
-      distance: (map['distance'] as num).toDouble(),
-      duration: map['duration'] as int,
-      createdAt: DateTime.parse(map['created_at'] as String),
+      id:
+          int.tryParse(map['id']?.toString() ?? '') ??
+          int.tryParse(map['Id']?.toString() ?? '') ??
+          0,
+      driverName: map['driver_id']?.toString(),
+      userId: map['user_id']?.toString() ?? '',
+      fare: (map['price'] is num) ? (map['price'] as num).toDouble() : 0,
+      fromLocation: map['from_location']?.toString() ?? '',
+      toLocation: map['to_location']?.toString() ?? '',
+      distance: (map['distance'] is num)
+          ? (map['distance'] as num).toDouble()
+          : double.tryParse(map['distance']?.toString() ?? '') ?? 0,
+      duration: map['duration'] is int
+          ? map['duration'] as int
+          : int.tryParse(map['duration']?.toString() ?? '') ?? 0,
+      createdAt:
+          DateTime.tryParse(map['created_at']?.toString() ?? '') ??
+          DateTime.now(),
+      paymentMethod: map['payment_method']?.toString() ?? 'Unknown',
+      status: map['status']?.toString() ?? 'Completed',
+      rating: map['rating'] is int
+          ? map['rating'] as int
+          : int.tryParse(map['rating']?.toString() ?? '') ?? 5,
     );
   }
 
   /// Convert Ride to Map for database insertion
   Map<String, dynamic> toMap() {
     return {
-      'Id': id,
-      'driver_id': driverId,
+      'id': id.toString(),
+      'driver_id': driverName,
       'user_id': userId,
       'from_location': fromLocation,
       'to_location': toLocation,
       'distance': distance,
       'duration': duration,
+      'status': status.toLowerCase().replaceAll(' ', '_'),
       'created_at': createdAt.toIso8601String(),
+      'fare': fare,
+      'category': category ?? 'Economy',
+      'payment_method': paymentMethod,
     };
   }
 
   Map<String, dynamic> toApiMap() {
     return {
-      if (driverId != null) 'driver_id': driverId,
+      if (driverName != null) 'driver_id': driverName,
       'from_location': fromLocation,
       'to_location': toLocation,
       'distance': distance,
@@ -63,56 +100,4 @@ class Ride {
       if (pickupLongitude != null) 'pickup_longitude': pickupLongitude,
     };
   }
-
-  /// Create a copy of Ride with optional field replacements
-  Ride copyWith({
-    int? id,
-    String? driverId,
-    String? userId,
-    String? fromLocation,
-    String? toLocation,
-    double? distance,
-    int? duration,
-    DateTime? createdAt,
-  }) {
-    return Ride(
-      id: id ?? this.id,
-      driverId: driverId ?? this.driverId,
-      userId: userId ?? this.userId,
-      fromLocation: fromLocation ?? this.fromLocation,
-      toLocation: toLocation ?? this.toLocation,
-      distance: distance ?? this.distance,
-      duration: duration ?? this.duration,
-      createdAt: createdAt ?? this.createdAt,
-    );
-  }
-
-  @override
-  String toString() =>
-      'Ride(id: $id, driverId: $driverId, userId: $userId, fromLocation: $fromLocation, toLocation: $toLocation, distance: $distance, duration: $duration, createdAt: $createdAt)';
-
-  @override
-  bool operator ==(Object other) =>
-      identical(this, other) ||
-      other is Ride &&
-          runtimeType == other.runtimeType &&
-          id == other.id &&
-          driverId == other.driverId &&
-          userId == other.userId &&
-          fromLocation == other.fromLocation &&
-          toLocation == other.toLocation &&
-          distance == other.distance &&
-          duration == other.duration &&
-          createdAt == other.createdAt;
-
-  @override
-  int get hashCode =>
-      id.hashCode ^
-      driverId.hashCode ^
-      userId.hashCode ^
-      fromLocation.hashCode ^
-      toLocation.hashCode ^
-      distance.hashCode ^
-      duration.hashCode ^
-      createdAt.hashCode;
 }

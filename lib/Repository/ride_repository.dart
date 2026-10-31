@@ -4,6 +4,7 @@ import 'package:flutter_secure_storage/flutter_secure_storage.dart';
 import 'package:http/http.dart' as http;
 import 'package:ride_booking/Databases/database.dart';
 import 'package:ride_booking/Models/ride_model.dart';
+import 'package:sqflite/sqflite.dart';
 
 class RideBookingResult {
   final String message;
@@ -50,7 +51,11 @@ class RideRepository {
   Future<bool> _saveToSqlite(Ride ride) async {
     try {
       final db = await databaseService.database;
-      await db.insert('ride', ride.toMap());
+      await db.insert(
+        'rides',
+        ride.toMap(),
+        conflictAlgorithm: ConflictAlgorithm.replace,
+      );
       return true;
     } catch (_) {
       return false;

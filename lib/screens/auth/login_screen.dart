@@ -59,7 +59,7 @@ class _LoginScreenState extends ConsumerState<LoginScreen> {
           if (!context.mounted) return;
           Navigator.pushNamedAndRemoveUntil(
             context,
-            RouteNames.home,
+            RouteNames.navigation,
             (route) => false,
           );
         } else {

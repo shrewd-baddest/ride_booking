@@ -15,6 +15,7 @@ export const createRide = async (
         created_at,
         pickup_latitude,
         pickup_longitude,
+        fare,
     } = req.body as {
         from_location?: string;
         to_location?: string;
@@ -23,6 +24,7 @@ export const createRide = async (
         created_at?: string;
         pickup_latitude?: number;
         pickup_longitude?: number;
+        fare?: number;
     };
 
     if (
@@ -38,7 +40,9 @@ export const createRide = async (
         pickup_latitude < -90 ||
         pickup_latitude > 90 ||
         pickup_longitude < -180 ||
-        pickup_longitude > 180
+        pickup_longitude > 180 ||
+        typeof fare !== "number" ||
+        fare < 0
     ) {
         error(res, "Ride details are required", 400);
         return;
@@ -94,11 +98,43 @@ export const createRide = async (
             ]
         );
 
+          db.query(
+            `INSERT INTO payments (ride_id, total_fare, payment_status)
+             VALUES ($1, $2, $3)`,
+            [result.rows[0].id, fare , "pending"]
+          );
+
         await db.query("COMMIT");
         success(res, { ride: result.rows[0] }, "Ride created", 201);
     } catch (cause) {
         await db.query("ROLLBACK").catch(() => undefined);
         console.error("Failed to create ride", cause);
         error(res, "Ride could not be saved", 500);
+    }
+};
+
+
+export const getRideHistory = async (
+    req: AuthenticatedRequest,
+    res: Response
+): Promise<void> => {
+    if (!req.userId) {
+        error(res, "Authentication required", 401);
+        return;
+    }
+
+    try {
+        const result = await db.query(
+            `SELECT *
+             FROM rides
+                WHERE user_id = $1
+                ORDER BY created_at DESC`,
+            [req.userId]
+        );
+
+        success(res, { rides: result.rows }, "Ride history retrieved", 200);
+    } catch (cause) {
+        console.error("Failed to retrieve ride history", cause);
+        error(res, "Could not retrieve ride history", 500);
     }
 };

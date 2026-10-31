@@ -4,7 +4,6 @@ import 'package:ride_booking/Models/ride_model.dart';
 import 'package:ride_booking/riverpods/providers.dart';
 import 'package:ride_booking/routes/route_names.dart';
 import 'package:ride_booking/screens/home/Widgets/book_ride_button.dart';
-import 'package:ride_booking/screens/home/Widgets/booking_bottom_nav.dart';
 import 'package:ride_booking/screens/home/Widgets/booking_header.dart';
 import 'package:ride_booking/screens/home/Widgets/destination_field.dart';
 import 'package:ride_booking/screens/home/Widgets/location_field.dart';
@@ -86,6 +85,15 @@ class _RideBookingScreenState extends ConsumerState<RideBookingScreen> {
                               return;
                             }
 
+                            final selectedPrice = int.tryParse(
+                              currentRide.price.replaceAll(
+                                RegExp(r'[^0-9]'),
+                                '',
+                              ),
+                            );
+                            ref.read(priceProvider.notifier).state =
+                                selectedPrice ?? 0;
+
                             final messenger = ScaffoldMessenger.maybeOf(
                               context,
                             );
@@ -94,7 +102,13 @@ class _RideBookingScreenState extends ConsumerState<RideBookingScreen> {
                             );
                             final ride = Ride(
                               id: 0,
-                              driverId: null,
+                              driverName: null,
+                              fare: double.parse(
+                                currentRide.price.replaceAll(
+                                  RegExp(r'[^0-9.]'),
+                                  '',
+                                ),
+                              ),
                               userId: ref.read(userIdProvider),
                               fromLocation: ref
                                   .read(locationNameProvider)
@@ -124,10 +138,7 @@ class _RideBookingScreenState extends ConsumerState<RideBookingScreen> {
                             }
                             if (!context.mounted) return;
 
-                            Navigator.pushNamed(
-                              context,
-                              RouteNames.rideInProgress,
-                            );
+                            Navigator.pushNamed(context, RouteNames.payment);
                           },
                         ),
                       ],
@@ -139,7 +150,6 @@ class _RideBookingScreenState extends ConsumerState<RideBookingScreen> {
           ],
         ),
       ),
-      bottomNavigationBar: const BookingBottomNav(),
     );
   }
 }

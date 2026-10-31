@@ -1,6 +1,6 @@
 import 'dart:async';
 import 'dart:convert';
-
+import 'package:flutter_secure_storage/flutter_secure_storage.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:geocoding/geocoding.dart';
 import 'package:geolocator/geolocator.dart';
@@ -70,6 +70,50 @@ class RideBookingNotifier extends AsyncNotifier<String> {
     } catch (error, stackTrace) {
       state = AsyncError('Ride booking failed', stackTrace);
     }
+  }
+}
+
+class RideHistoryNotifier extends AsyncNotifier<List<Ride>?> {
+  static const String _apiUrl = 'http://10.0.2.2:3000/api/rides/history';
+  static const FlutterSecureStorage _storage = FlutterSecureStorage();
+
+  @override
+  Future<List<Ride>?> build() async {
+    final token = await _storage.read(key: 'token');
+    if (token == null || token.isEmpty) {
+      return null;
+    }
+
+    final response = await http.get(
+      Uri.parse(_apiUrl),
+      headers: {
+        'Content-Type': 'application/json',
+        'Authorization': 'Bearer $token',
+      },
+    );
+
+    if (response.statusCode != 200) {
+      throw StateError('Failed to load driver details: ${response.statusCode}');
+    }
+
+    final decoded = jsonDecode(response.body);
+    if (decoded is! Map<String, dynamic>) {
+      throw StateError('Invalid ride history response');
+    }
+
+    final rides = <Ride>[];
+    final data = decoded['data'];
+    final rideList = data is Map<String, dynamic> ? data['rides'] : null;
+
+    if (rideList is List) {
+      for (final rideData in rideList) {
+        if (rideData is Map<String, dynamic>) {
+          rides.add(Ride.fromMap(rideData));
+        }
+      }
+    }
+
+    return rides;
   }
 }
 

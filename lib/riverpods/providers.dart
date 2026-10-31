@@ -5,6 +5,7 @@ import 'package:flutter_riverpod/legacy.dart';
 import 'package:geolocator/geolocator.dart';
 import 'package:ride_booking/Models/driver_model.dart';
 import 'package:ride_booking/Models/login_model.dart';
+import 'package:ride_booking/Models/ride_model.dart';
 import 'package:ride_booking/Repository/ride_repository.dart';
 import 'package:ride_booking/riverpods/authNotifier.dart';
 import 'package:ride_booking/constants/book_ride.dart';
@@ -22,6 +23,7 @@ final destinationProvider = StateProvider<String>((ref) => '');
 final gpsProvider = AsyncNotifierProvider<GpsNotifier, Position>(
   GpsNotifier.new,
 );
+final priceProvider = StateProvider<int>((ref) => 0);
 final rideProvider = StateProvider<String>((ref) => '');
 final rideStatusProvider = StateProvider<RideStatus>(
   (ref) => RideStatus.booked,
@@ -45,4 +47,8 @@ final loginProvider = AsyncNotifierProvider<AuthNotifier, LoginResponse?>(
 
 final registerProvider = AsyncNotifierProvider<AuthNotifier, LoginResponse?>(
   AuthNotifier.new,
+);
+
+final historyProvider = AsyncNotifierProvider<RideHistoryNotifier, List<Ride>?>(
+  RideHistoryNotifier.new,
 );

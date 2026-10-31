@@ -10,8 +10,8 @@ class getDriver {
   Future<Driver?> getDetails() async {
     final db = await databaseService.database;
     final List<Map<String, dynamic>> maps = await db.query(
-      'driver',
-      where: 'user_id = ?',
+      'drivers',
+      where: 'id = ?',
       whereArgs: [userId],
     );
     if (maps.isNotEmpty) {

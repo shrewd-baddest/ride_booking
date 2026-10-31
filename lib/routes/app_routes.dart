@@ -8,8 +8,6 @@ import 'package:ride_booking/screens/booking/finding_driver_screen.dart';
 import 'package:ride_booking/screens/booking/location_search_screen.dart';
 import 'package:ride_booking/screens/booking/ride_completed_screen.dart';
 import 'package:ride_booking/screens/booking/ride_in_progress_screen.dart';
-import 'package:ride_booking/screens/history/rate_ride_screen.dart';
-import 'package:ride_booking/screens/history/ride_details_screen.dart';
 import 'package:ride_booking/screens/history/ride_history_screen.dart';
 import 'package:ride_booking/screens/home/home_screen.dart';
 import 'package:ride_booking/screens/navigation/navigation_screen.dart';
@@ -103,18 +101,6 @@ class AppRoutes {
       case RouteNames.cancelRide:
         return MaterialPageRoute(
           builder: (_) => const CancelRideScreen(),
-          settings: settings,
-        );
-
-      case RouteNames.rideDetails:
-        return MaterialPageRoute(
-          builder: (_) => const RideDetailsScreen(),
-          settings: settings,
-        );
-
-      case RouteNames.rateRide:
-        return MaterialPageRoute(
-          builder: (_) => const RateRideScreen(),
           settings: settings,
         );
 
