@@ -8,6 +8,7 @@ import { testDatabaseConnection } from "../Database/database.js";
 import authRouter from "../Routes/authControllers.js";
 import driverRouter from "../Routes/driverRoutes.js";
 import rideRouter from "../Routes/rideRoutes.js";
+import paymentRouter from "../Routes/paymentRoutes.js";
 
 const app = express();
 
@@ -16,6 +17,7 @@ app.use(express.json());
 app.use("/api/auth", authRouter);
 app.use("/api/drivers", driverRouter);
 app.use("/api/rides", rideRouter);
+app.use("/api/payments", paymentRouter);
 
 const PORT = process.env.PORT || 3000;
 

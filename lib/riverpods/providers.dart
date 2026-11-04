@@ -52,3 +52,7 @@ final registerProvider = AsyncNotifierProvider<AuthNotifier, LoginResponse?>(
 final historyProvider = AsyncNotifierProvider<RideHistoryNotifier, List<Ride>?>(
   RideHistoryNotifier.new,
 );
+
+final paymentProvider=AsyncNotifierProvider<PaymentNotifier, String>(
+  PaymentNotifier.new,
+);

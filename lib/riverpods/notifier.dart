@@ -73,6 +73,50 @@ class RideBookingNotifier extends AsyncNotifier<String> {
   }
 }
 
+
+class PaymentNotifier extends AsyncNotifier<String> {
+   static const String _apiUrl = 'http://10.0.2.2:3000/api/rides/payment';
+  static const FlutterSecureStorage _storage = FlutterSecureStorage();
+
+  @override
+  Future<String> build() async => '...';
+
+  Future<void> initiatePayment(String phoneNumber ) async {
+    state = const AsyncLoading();
+
+    try {
+      final token = await _storage.read(key: 'token');
+      if (token == null || token.isEmpty) {
+        throw StateError('Authentication token is missing');
+      }
+      final price=ref.read(priceProvider);  
+
+      final response = await http.post(
+        Uri.parse(_apiUrl),
+        headers: {
+          'Content-Type': 'application/json',
+          'Authorization': 'Bearer $token',
+        },
+        body: jsonEncode({
+          'phone_number': phoneNumber,
+          'amount': price
+        }),
+      );
+
+      if (response.statusCode != 200) {
+        throw StateError('Payment initiation failed: ${response.statusCode}');
+      }
+    final results=response.body;
+
+      state = AsyncData(results);
+     
+    } catch (error, stackTrace) {
+      state = AsyncError('Payment initiation failed', stackTrace);
+    }
+  }
+}
+
+
 class RideHistoryNotifier extends AsyncNotifier<List<Ride>?> {
   static const String _apiUrl = 'http://10.0.2.2:3000/api/rides/history';
   static const FlutterSecureStorage _storage = FlutterSecureStorage();

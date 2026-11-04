@@ -15,7 +15,6 @@ import 'package:ride_booking/screens/payment/add_card_screen.dart';
 import 'package:ride_booking/screens/payment/payment_failed_screen.dart';
 import 'package:ride_booking/screens/payment/payment_methods_screen.dart';
 import 'package:ride_booking/screens/payment/payment_screen.dart';
-import 'package:ride_booking/screens/payment/payment_success_screen.dart';
 import 'package:ride_booking/screens/profile/edit_profile_screen.dart';
 import 'package:ride_booking/screens/profile/profile_screen.dart';
 import 'package:ride_booking/screens/profile/saved_places_screen.dart';
@@ -113,12 +112,6 @@ class AppRoutes {
       case RouteNames.addCard:
         return MaterialPageRoute(
           builder: (_) => const AddCardScreen(),
-          settings: settings,
-        );
-
-      case RouteNames.paymentSuccess:
-        return MaterialPageRoute(
-          builder: (_) => const PaymentSuccessScreen(),
           settings: settings,
         );
 

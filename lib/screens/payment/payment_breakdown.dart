@@ -32,7 +32,7 @@ class PaymentBreakdown extends StatelessWidget {
           const SizedBox(height: 10),
           const PaymentPriceRow(
             title: 'Promo discount',
-            amount: '-KSh 24',
+            amount: '-KSh xxx',
             valueColor: Color(0xFF00D68F),
           ),
           const Padding(

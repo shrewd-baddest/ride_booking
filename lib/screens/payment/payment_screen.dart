@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:ride_booking/riverpods/providers.dart';
-import 'confirm_payment_action.dart';
+import 'package:ride_booking/screens/payment/showDialog.dart';
 import 'payment_breakdown.dart';
 import 'payment_header.dart';
 import 'payment_option.dart';
@@ -107,7 +107,7 @@ class _PaymentScreenState extends ConsumerState<PaymentScreen> {
                 width: double.infinity,
                 height: 46,
                 child: ElevatedButton(
-                  onPressed: () => confirmPayment(context, selectedPayment),
+                  onPressed: () => showPaymentDialog(context, ref),
                   style: ElevatedButton.styleFrom(
                     backgroundColor: yellowColor,
                     foregroundColor: Colors.black,
